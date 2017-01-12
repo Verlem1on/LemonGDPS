@@ -15,7 +15,7 @@ function checkGJP($gjp, $accountID) {
 }
 
 function sqlTrim($data) {
-	return str_replace(array("'", "(", ")", "~", ":", "|", "#"), "", htmlspecialchars($data));
+	return str_replace(array("'", "(", ")", "~", ":", "|", "#"), "", htmlspecialchars($data, ENT_QUOTES));
 }
 
 function makeTime($datetime) {
