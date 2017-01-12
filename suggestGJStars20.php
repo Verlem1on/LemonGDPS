@@ -8,6 +8,8 @@ $stars = sqlTrim($_POST["stars"]);
 $featured = sqlTrim($_POST["feature"]);
 $levelID = sqlTrim($_POST["levelID"]);
 
+if(disabled($accountID)) exit("-1");
+
 if(!checkGJP($gjp, $accountID)) exit("-1");
 $q = $db->prepare("SELECT * FROM accounts WHERE accountID = '$accountID'");
 $q->execute();

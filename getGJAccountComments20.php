@@ -5,6 +5,8 @@ require "lib.php";
 $accountID = sqlTrim($_POST["accountID"]);
 $page = sqlTrim($_POST["page"]);
 
+if(disabled($accountID)) exit("-1");
+
 $q = $db->prepare("SELECT * FROM comments WHERE accountComment = '1' AND accountID = '$accountID' ORDER BY uploadTime DESC");
 $q->execute();
 

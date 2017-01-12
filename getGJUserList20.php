@@ -6,6 +6,8 @@ $accountID = sqlTrim($_POST["accountID"]);
 $gjp = sqlTrim($_POST["gjp"]);
 $type = sqlTrim($_POST["type"]);
 
+if(disabled($accountID)) exit("-1");
+
 if(checkGJP($gjp, $accountID)) {
 	$q = $db->prepare("SELECT * FROM friends WHERE accountID = '$accountID'");
 	$q->execute();

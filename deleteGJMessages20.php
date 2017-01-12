@@ -8,6 +8,8 @@ $messageID = sqlTrim($_POST["messageID"]);
 $isSender = sqlTrim($_POST["isSender"]);
 $messages = sqlTrim($_POST["messages"]);
 
+if(disabled($accountID)) exit("-1");
+
 if(checkGJP($gjp, $accountID)) {
 	if($messageID != "") {
 		$q = $db->prepare("DELETE FROM messages WHERE messageID = '$messageID'");

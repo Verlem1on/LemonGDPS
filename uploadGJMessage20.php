@@ -8,6 +8,8 @@ $toAccountID = sqlTrim($_POST["toAccountID"]);
 $subject = sqlTrim($_POST["subject"]);
 $body = sqlTrim($_POST["body"]);
 
+if(disabled($accountID)) exit("-1");
+
 if(checkGJP($gjp, $accountID)) {
 	if(canWriteTo($toAccountID)) {
 		$q = $db->prepare("INSERT INTO messages (accountID, targetID, subject, body, uploadTime) VALUES ('$accountID', '$toAccountID', '$subject', '$body', '".time()."')");

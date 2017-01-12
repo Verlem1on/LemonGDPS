@@ -7,6 +7,8 @@ $gjp = sqlTrim($_POST["gjp"]);
 $page = sqlTrim($_POST["page"]);
 $getSent = sqlTrim($_POST["getSent"]);
 
+if(disabled($accountID)) exit("-1");
+
 if(checkGJP($gjp, $accountID)) {
 	switch ($getSent) {
 		case '1':

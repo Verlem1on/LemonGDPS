@@ -7,6 +7,8 @@ $gjp = sqlTrim($_POST["gjp"]);
 $targetAccountID = sqlTrim($_POST["targetAccountID"]);
 $isSender = sqlTrim($_POST["isSender"]);
 
+if(disabled($accountID)) exit("-1");
+
 if(checkGJP($gjp, $accountID)) {
 	if($targetAccountID != "0") {
 		if($isSender != "0") {

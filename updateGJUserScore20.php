@@ -21,6 +21,8 @@ $pColor = sqlTrim($_POST["color1"]);
 $sColor = sqlTrim($_POST["color2"]);
 $iconType = sqlTrim($_POST["iconType"]);
 
+if(disabled($accountID)) exit("-1");
+
 if (checkGJP($gjp, $accountID)) {
 	$q = $db->prepare("UPDATE users SET stars = '$stars', coins = '$coins', userCoins = '$userCoins', demons = '$demons', special = '$special', icon = '$accIcon', ship = '$accShip', ball = '$accBall', ufo = '$accBird', wave = '$accDart', robot = '$accRobot', glow = '$accGlow', pColor = '$pColor', sColor = '$sColor', iconType = '$iconType' WHERE accountID = '$accountID'");
 	$q->execute();

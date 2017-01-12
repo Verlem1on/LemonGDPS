@@ -22,6 +22,8 @@ $levelVersion = sqlTrim($_POST["levelVersion"]);
 $levelLength = sqlTrim($_POST["levelLength"]);
 $requestedStars = sqlTrim($_POST["requestedStars"]);
 
+if(disabled($accountID)) exit("-1");
+
 if(checkGJP($gjp, $accountID)) {
 	$a = $db->prepare("SELECT * FROM users WHERE accountID = '$accountID'");
 	$a->execute();

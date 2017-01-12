@@ -8,6 +8,8 @@ $frS = sqlTrim($_POST["frS"]);
 $mS = sqlTrim($_POST["mS"]);
 $yt = sqlTrim($_POST["yt"]);
 
+if(disabled($accountID)) exit("-1");
+
 if(checkGJP($gjp, $accountID)) {
 	$q = $db->prepare("UPDATE accounts SET msgAllowed = '$mS', frAllowed = '$frS', ytLink = '$yt' WHERE accountID = '$accountID'");
 	$q->execute();

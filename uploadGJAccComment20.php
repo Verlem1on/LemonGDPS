@@ -6,6 +6,8 @@ $accountID = sqlTrim($_POST["accountID"]);
 $gjp = sqlTrim($_POST["gjp"]);
 $comment = sqlTrim($_POST["comment"]);
 
+if(disabled($accountID)) exit("-1");
+
 if (checkGJP($gjp, $accountID)) {
 	$a = $db->prepare("SELECT * FROM users WHERE accountID = '$accountID'");
 	$a->execute();

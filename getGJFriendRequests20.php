@@ -7,10 +7,12 @@ $gjp = sqlTrim($_POST["gjp"]);
 $page = sqlTrim($_POST["page"]);
 $getSent = sqlTrim($_POST["getSent"]);
 
+if(disabled($accountID)) exit("-1");
+
 if(checkGJP($gjp, $accountID)) {
 	if($getSent == "1") {
-		$q = $db->prepare("SELECT * FROM frRequests WHERE accountID = '$accountID'");
-		$q->execute();
+		$q = $db->prepare("SELECT * FROM frRequests WHERE accountID = :accountID");
+		$q->execute(array('accountID' => $accountID));
 		$a = $db->prepare("SELECT * FROM users");
 		$a->execute();
 
@@ -34,8 +36,8 @@ if(checkGJP($gjp, $accountID)) {
 
 		exit("#".count($r).":0:10");
 	} else {
-		$q = $db->prepare("SELECT * FROM frRequests WHERE targetID = '$accountID'");
-		$q->execute();
+		$q = $db->prepare("SELECT * FROM frRequests WHERE targetID = :targetID");
+		$q->execute(array('targetID' => $accountID));
 		$a = $db->prepare("SELECT * FROM users");
 		$a->execute();
 
