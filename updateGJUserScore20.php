@@ -24,13 +24,24 @@ $iconType = sqlTrim($_POST["iconType"]);
 if(disabled($accountID)) exit("-1");
 
 if (checkGJP($gjp, $accountID)) {
+	$a = $db->prepare("SELECT * FROM accounts WHERE accountID = '$accountID'");
+	$a->execute();
+	$r1 = $a->fetch(PDO::FETCH_ASSOC);
+
+	if($r1["banned"] == "1") quit($accountID);;
+
 	$q = $db->prepare("UPDATE users SET stars = '$stars', coins = '$coins', userCoins = '$userCoins', demons = '$demons', special = '$special', icon = '$accIcon', ship = '$accShip', ball = '$accBall', ufo = '$accBird', wave = '$accDart', robot = '$accRobot', glow = '$accGlow', pColor = '$pColor', sColor = '$sColor', iconType = '$iconType' WHERE accountID = '$accountID'");
 	$q->execute();
+	quit($accountID);
+} else {
+	exit("-1");
+}
+
+function quit($accountID) {
+	include "connection.php";
 	$q1 = $db->prepare("SELECT * FROM users WHERE accountID = '$accountID'");
 	$q1->execute();
 	$r = $q1->fetch(PDO::FETCH_ASSOC);
 	exit($r["userID"]);
-} else {
-	exit("-1");
 }
 ?>
