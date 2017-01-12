@@ -80,4 +80,28 @@ function friendStatus($a, $b) {
 	}
 	return 0;
 }
+
+function canWriteTo($accountID) {
+	include "connection.php";
+	$q = $db->prepare("SELECT * FROM accounts WHERE accountID = '$accountID'");
+	$q->execute();
+	$r = $q->fetch(PDO::FETCH_ASSOC);
+	if($r["msgAllowed"] != "0") return false; else return true;
+}
+
+function isMod($accountID) {
+	include "connection.php";
+	$q = $db->prepare("SELECT * FROM accounts WHERE accountID = '$accountID'");
+	$q->execute();
+	$r = $q->fetch(PDO::FETCH_ASSOC);
+	if($r["mod"] != "0") return false; else return true;
+}
+
+function messageStatus($accountID) {
+	include "connection.php";
+	$q = $db->prepare("SELECT * FROM accounts WHERE accountID = '$accountID'");
+	$q->execute();
+	$r = $q->fetch(PDO::FETCH_ASSOC);
+	return $r["msgAllowed"];
+}
 ?>
