@@ -9,7 +9,9 @@ $type = sqlTrim($_POST["type"]);
 if(checkGJP($gjp, $accountID)) {
 	$q = $db->prepare("SELECT * FROM friends WHERE accountID = '$accountID'");
 	$q->execute();
-
+	$a = $db->prepare("UPDATE friends SET new = 0 WHERE accountID = '$accountID'");
+	$a->execute();
+	
 	if($q->rowCount() <= 0) exit("-2");
 
 	$r = $q->fetchAll();
