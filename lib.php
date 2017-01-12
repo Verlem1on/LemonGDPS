@@ -60,4 +60,24 @@ function newMessages($accountID) {
 	$r = $q->fetchAll();
 	return count($r);
 }
+
+function friendStatus($a, $b) {
+	include "connection.php";
+	$q = $db->prepare("SELECT * FROM friends WHERE accountID = '$a' AND targetID = '$b'");
+	$q->execute();
+	if($q->rowCount() > 0) {
+		return 1;
+	}
+	$q = $db->prepare("SELECT * FROM frRequests WHERE accountID = '$a' AND targetID = '$b'");
+	$q->execute();
+	if($q->rowCount() > 0) {
+		return 4;
+	}
+	$q = $db->prepare("SELECT * FROM frRequests WHERE accountID = '$b' AND targetID = '$a'");
+	$q->execute();
+	if($q->rowCount() > 0) {
+		return 3;
+	}
+	return 0;
+}
 ?>
