@@ -10,6 +10,8 @@ $q = $db->prepare("SELECT * FROM comments WHERE accountComment = '0' AND levelID
 $q->execute();
 $r = $q->fetchAll();
 
+if(count($r) == 0) exit("#0:0:10");
+
 $userString = "";
 
 for($i = 0; $i < 10; $i++) {
