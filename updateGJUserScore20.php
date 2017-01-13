@@ -2,6 +2,8 @@
 require "lib.php";
 include "connection.php";
 
+updateCP();
+
 $accountID = sqlTrim($_POST["accountID"]);
 $gjp = sqlTrim($_POST["gjp"]);
 $userName = sqlTrim($_POST["userName"]);
@@ -43,5 +45,25 @@ function quit($accountID) {
 	$q1->execute();
 	$r = $q1->fetch(PDO::FETCH_ASSOC);
 	exit($r["userID"]);
+}
+
+function updateCP() {
+	include "connection.php";
+	$query = $db->prepare("SELECT * FROM users");
+	$query->execute();
+	$result = $query->fetchAll();
+
+	foreach($result as $user){
+		$query2 = $db->prepare("SELECT * FROM levels WHERE userID = '".$user["userID"]."' AND stars != 0");
+		$query2->execute();
+		$creatorpoints = $query2->rowCount();
+
+		$query3 = $db->prepare("SELECT * FROM levels WHERE userID = '".$user["userID"]."' AND featured != 0");
+		$query3->execute();
+		$creatorpoints = $creatorpoints + $query3->rowCount();
+
+		$query4 = $db->prepare("UPDATE users SET cp='$creatorpoints' WHERE userID='".$user["userID"]."'");
+		$query4->execute();
+	}
 }
 ?>
