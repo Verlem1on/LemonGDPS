@@ -7,20 +7,20 @@ $gjp = sqlTrim($_POST["gjp"]);
 $messageID = sqlTrim($_POST["messageID"]);
 
 if(checkGJP($gjp, $accountID)) {
-	$q = $db->prepare("SELECT * FROM messages WHERE messageID = '$messageID'");
+	$q = $db->prepare("SELECT * FROM messages WHERE messageID = :m");
 	$q->execute();
 	$m = $q->fetch(PDO::FETCH_ASSOC);
 	$qq = "";
 	if($m["targetID"] == $accountID) 
-		$qq = "SELECT * FROM users WHERE accountID = '".$m["accountID"]."'";
+		$qq = "SELECT * FROM users WHERE accountID = :a";
 	else
-		$qq = "SELECT * FROM users WHERE accountID = '".$m["targetID"]."'";
+		$qq = "SELECT * FROM users WHERE accountID = :t";
 	$qa = $db->prepare($qq);
-	$qa->execute();
+	$qa->execute(array('a' => $accountID, 't' => $m["targetID"]));
 	$u = $qa->fetch(PDO::FETCH_ASSOC);
 
-	$q1 = $db->prepare("UPDATE messages SET `read` = 1 WHERE messageID = '$messageID'");
-	$q1->execute();
+	$q1 = $db->prepare("UPDATE messages SET `read` = 1 WHERE messageID = :m");
+	$q1->execute(array('m' => $messageID));
 
 	exit("6:".$u["userName"].":3:".$u["userID"].":2:".$u["accountID"].":1:".$m["messageID"].":4:".$m["subject"].":8:1:9:0:5:".$m["body"].":7:".makeTime($n["uploadTime"]));
 } else exit("-1");

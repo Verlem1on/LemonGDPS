@@ -12,8 +12,8 @@ if(disabled($accountID)) exit("-1");
 
 if(checkGJP($gjp, $accountID)) {
 	if($messageID != "") {
-		$q = $db->prepare("DELETE FROM messages WHERE messageID = '$messageID'");
-		$q->execute();
+		$q = $db->prepare("DELETE FROM messages WHERE messageID = :m");
+		$q->execute(array('m' => $messageID));
 		exit("1");
 	} 
 
@@ -21,15 +21,15 @@ if(checkGJP($gjp, $accountID)) {
 		if($isSender != "") {
 			$mArray = explode(',', $messages);
 			foreach($mArray as $m) {
-				$q = $db->prepare("DELETE FROM messages WHERE messageID = '$m' AND accountID = '$accountID'");
-				$q->execute();
+				$q = $db->prepare("DELETE FROM messages WHERE messageID = :m AND accountID = :a");
+				$q->execute(array('m' => $m, 'a' => $accountID));
 			}
 			exit("1");
 		} else {
 			$mArray = explode(',', $messages);
 			foreach($mArray as $m) {
-				$q = $db->prepare("DELETE FROM messages WHERE messageID = '$m'");
-				$q->execute();
+				$q = $db->prepare("DELETE FROM messages WHERE messageID = :m");
+				$q->execute(array('m' => $messageID));
 			}
 			exit("1");
 		}
