@@ -35,6 +35,10 @@ if (checkGJP($gjp, $accountID)) {
 	$messageStatus = messageStatus($targetAccountID);
 	if($friendStatus == "1" and $messageStatus == "1") $messageStatus = "0";
 	else if($messageStatus == "2") $messageStatus = "1";
+	# Checking blocking
+	$q = $db->prepare("SELECT * FROM blocked WHERE accountID = :t AND targetID = :a");
+	$q->execute(array('a' => $accountID, 't' => $targetAccountID));
+	if($q->rowCount() > 0) exit("1:".$user["userName"].":2:".$user["userID"].":13:0:17:0:10:0:11:0:3:0:46:0:4:0:8:0:18:1:19:1:20::21:0:22:0:23:0:24:0:25:0:26:0:28:0:43:1:47:1:30:0:16:".$user["accountID"].":31:0:44::45::38::39::40::29:1");
 
 	if($accountID == $targetAccountID) {
 		exit("1:".$user["userName"].":2:".$user["userID"].":13:".$user["coins"].":17:".$user["userCoins"].":10:".$user["pColor"].":11:".$user["sColor"].":3:".$user["stars"].":46:0:4:".$user["demons"].":8:".$user["cp"].":18:$messageStatus:19:".$usr["frAllowed"].":20:".$usr["ytLink"].":21:".$user["icon"].":22:".$user["ship"].":23:".$user["ball"].":24:".$user["ufo"].":25:".$user["wave"].":26:".$user["robot"].":28:".$user["glow"].":43:1:47:1:30:$top:16:".$user["accountID"].":31:0:44::45::38:".newMessages($targetAccountID).":39:".newRequests($targetAccountID).":40:".newFriends($targetAccountID).":29:1");
