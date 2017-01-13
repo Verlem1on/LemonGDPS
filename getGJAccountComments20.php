@@ -7,8 +7,8 @@ $page = sqlTrim($_POST["page"]);
 
 if(disabled($accountID)) exit("-1");
 
-$q = $db->prepare("SELECT * FROM comments WHERE accountComment = '1' AND accountID = '$accountID' ORDER BY uploadTime DESC");
-$q->execute();
+$q = $db->prepare("SELECT * FROM comments WHERE accountComment = '1' AND accountID = :a ORDER BY uploadTime DESC");
+$q->execute(array('a' => $accountID));
 
 if($q->rowCount() <= 0) exit("#0:0:10");
 

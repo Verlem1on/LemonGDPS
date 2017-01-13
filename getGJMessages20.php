@@ -12,8 +12,8 @@ if(disabled($accountID)) exit("-1");
 if(checkGJP($gjp, $accountID)) {
 	switch ($getSent) {
 		case '1':
-			$q = $db->prepare("SELECT * FROM messages WHERE accountID = '$accountID'");
-			$q->execute();
+			$q = $db->prepare("SELECT * FROM messages WHERE accountID = :a");
+			$q->execute(array('a' => $accountID));
 			$r = $q->fetchAll();
 			$userString = "";
 
@@ -37,8 +37,8 @@ if(checkGJP($gjp, $accountID)) {
 			break;
 		
 		default:
-			$q = $db->prepare("SELECT * FROM messages WHERE targetID = '$accountID'");
-			$q->execute();
+			$q = $db->prepare("SELECT * FROM messages WHERE targetID = :a");
+			$q->execute(array('a' => $accountID));
 			$r = $q->fetchAll();
 			$userString = "";
 

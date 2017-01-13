@@ -21,5 +21,19 @@ for($i = 0; $i < 10; $i++) {
 	}
 }
 
-exit("#".count($r).":$page:10#");
+exit("#".count($r).":$page:10#".genPack($mpIDs));
+
+function genPack($lvlsmultistring) {
+	$lvlsarray = explode(",", $lvlsmultistring);
+	include "connection.php";
+	$hash = "";
+	foreach($lvlsarray as $id){
+		$query=$db->prepare("select * from mappacks where ID = :i");
+		$query->execute(array('i' => $id));
+		$result2 = $query->fetchAll();
+		$result = $result2[0];
+		$hash = $hash . $result["ID"][0].$result["ID"][strlen($result["ID"])-1].$result["stars"].$result["coins"];
+	}
+	return sha1($hash . "xI25fpAapCQg");
+}
 ?>
