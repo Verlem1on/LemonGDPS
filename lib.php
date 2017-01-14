@@ -18,8 +18,69 @@ function sqlTrim($data) {
 	return str_replace(array("'", "(", ")", "~", ":", "|", "#"), "", htmlspecialchars($data, ENT_QUOTES));
 }
 
-function makeTime($datetime) {
-    return date("j.n.Y H:i:s", $datetime);
+function makeTime($timestamp) {
+$ts = $timestamp;
+$cts = time();
+$str = "";
+$result = $cts-$ts;
+if ($result < 31556952) {
+if ($result < 2629746) {
+if ($result < 86400) {
+if ($result < 3600) {
+if ($result < 60) {
+$n = $result/1;
+if ($n == 1){
+$str = " second";
+}else{
+$str = " seconds";
+}
+$final = $n.$str;
+}else{
+ $n = floor($result/60);
+if ($n == 1){
+$str = " minute";
+  }else{
+  $str = " minutes";
+}
+$final = $n.$str;
+ }
+            }else{
+            $n = floor($result/3660);
+            if ($n == 1){
+                    $str = " hour";
+                    }else{
+                    $str = " hours";
+                    }
+                    $final = $n.$str;
+            }
+        }else{
+        $n = floor($result/86400);
+        if ($n == 1){
+                    $str = " day";
+                    }else{
+                    $str = " days";
+                    }
+                    $final = $n.$str;
+        }
+    }else{
+    $n = floor($result/2629746);
+    if ($n == 1){
+                    $str = " month";
+                    }else{
+                    $str = " months";
+                    }
+                    $final = $n.$str;
+    }
+}else{
+$n = floor($result/31556952);
+if ($n == 1){
+                    $str = " year";
+                    }else{
+                    $str = " years";
+                    }
+                    $final = $n.$str;
+}
+return $final;
 }
 
 function calcTop($accountID) {
@@ -103,5 +164,13 @@ function messageStatus($accountID) {
 	$q->execute();
 	$r = $q->fetch(PDO::FETCH_ASSOC);
 	return $r["msgAllowed"];
+}
+
+function disabled($a) {
+	include "connection.php";
+	$q = $db->prepare("SELECT * FROM accounts WHERE accountID = '$a'");
+	$q->execute();
+	$r = $q->fetch(PDO::FETCH_ASSOC);
+	if($r["disabled"] == "0") return false; else return true;
 }
 ?>
