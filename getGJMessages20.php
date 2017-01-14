@@ -12,7 +12,7 @@ if(disabled($accountID)) exit("-1");
 if(checkGJP($gjp, $accountID)) {
 	switch ($getSent) {
 		case '1':
-			$q = $db->prepare("SELECT * FROM messages WHERE accountID = :a");
+			$q = $db->prepare("SELECT * FROM messages WHERE accountID = :a ORDER BY messageID DESC");
 			$q->execute(array('a' => $accountID));
 			$r = $q->fetchAll();
 			$userString = "";
