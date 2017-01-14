@@ -37,7 +37,7 @@ if(checkGJP($gjp, $accountID)) {
 			break;
 		
 		default:
-			$q = $db->prepare("SELECT * FROM messages WHERE targetID = :a");
+			$q = $db->prepare("SELECT * FROM messages WHERE targetID = :a ORDER BY messageID DESC");
 			$q->execute(array('a' => $accountID));
 			$r = $q->fetchAll();
 			$userString = "";
