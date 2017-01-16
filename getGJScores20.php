@@ -27,10 +27,10 @@ if(checkGJP($gjp, $accountID)) {
 			break;
 		
 		case 'friends':
-			$q = $db->prepare("SELECT * FROM friends WHERE accountID = '$accountID'");
-			$q->execute();
+			$q = $db->prepare("SELECT * FROM friends WHERE accountID = :a");
+			$q->execute([':a' => $accountID]);
 
-			if($q->rowCount <= 0) {
+			if($q->rowCount() <= 0) {
 				unset($q);
 				$q = $db->prepare("SELECT * FROM users WHERE accountID = '$accountID'");
 				$q->execute();
