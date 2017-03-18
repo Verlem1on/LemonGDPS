@@ -2,6 +2,8 @@
 include "connection.php";
 require "lib.php";
 
+tryKillAccs();
+
 $accountID = sqlTrim($_POST["accountID"]);
 $gjp = sqlTrim($_POST["gjp"]);
 $levelName = sqlTrim($_POST["levelName"]);
@@ -23,6 +25,7 @@ $levelLength = sqlTrim($_POST["levelLength"]);
 $requestedStars = sqlTrim($_POST["requestedStars"]);
 
 if(disabled($accountID)) exit("-1");
+if (!checkAct($accountID)) exit("-1");
 
 if(checkGJP($gjp, $accountID)) {
 	$a = $db->prepare("SELECT * FROM users WHERE accountID = '$accountID'");
@@ -36,14 +39,14 @@ if(checkGJP($gjp, $accountID)) {
 			$res = $q->fetch(PDO::FETCH_ASSOC);
 			if($res["userID"] == $r["userID"]) {
 				$q1 = $db->prepare("UPDATE levels SET string = '$levelString', version = '$levelVersion', length = '$levelLength', `desc` = '$levelDesc', coins = '$coins', requestedStars = '$requestedStars', objects = '$objects', twoPlayer = '$twoPlayer', songID = '$songID', song = '$audioTrack', extra = '$extraString', info = '$levelInfo', password = '$password', original = '$original', game = '$gameVersion', updateTime = '".time()."' WHERE levelID = '$levelID'");
-				$q1->execute();
+				$q1->execute(array('u' => $unlisted));
 				exit("$levelID");
 			} else exit("-1");
 		} else exit("-1");
 	}
 
 	$q = $db->prepare("INSERT INTO levels (name, userID, version, `desc`, coins, objects, twoPlayer, songID, song, string, extra, password, length, info, original, game, requestedStars, uploadTime, updateTime) VALUES ('$levelName', '".$r["userID"]."', '$levelVersion', '$levelDesc', '$coins', '$objects', '$twoPlayer', '$songID', '$audioTrack', '$levelString', '$extraString', '$password', '$levelLength', '$levelInfo', '$original', '$gameVersion', '$requestedStars', '".time()."', '".time()."')");
-	$q->execute();
+	$q->execute(array('u' => $unlisted));
 	exit($db->lastInsertId());
 } else {
 	exit("-1");

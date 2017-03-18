@@ -7,7 +7,10 @@ $gjp = sqlTrim($_POST["gjp"]);
 $page = sqlTrim($_POST["page"]);
 $getSent = sqlTrim($_POST["getSent"]);
 
+updateCP();
+
 if(disabled($accountID)) exit("-1");
+if (!checkAct($accountID)) exit("-1");
 
 if(checkGJP($gjp, $accountID)) {
 	if($getSent == "1") {
@@ -25,7 +28,7 @@ if(checkGJP($gjp, $accountID)) {
 			foreach ($ar as $user) {
 				$dat = $r[$i];
 				if($dat["targetID"] == $user["accountID"]) {
-					echo "1:".$user["userName"].":2:".$user["userID"].":9:".$user["icon"].":10:".$user["pColor"].":11:".$user["sColor"].":14:".$user["iconType"].":15:".$user["special"].":16:".$user["accountID"].":32:".$dat["requestID"].":35:".$dat["comment"].":41:".$dat["read"].":37:".makeTime($dat["uploadTime"]);
+					echo "1:".$user["userName"].":2:".$user["userID"].":9:".$user["shareIcon"].":10:".$user["pColor"].":11:".$user["sColor"].":14:".$user["iconType"].":15:".$user["special"].":16:".$user["accountID"].":32:".$dat["requestID"].":35:".$dat["comment"].":41:".$dat["read"].":37:".makeTime($dat["uploadTime"]);
 				}
 			}
 			if($i < count($r) - 1)
@@ -50,7 +53,9 @@ if(checkGJP($gjp, $accountID)) {
 			foreach ($ar as $user) {
 				$dat = $r[$i];
 				if($dat["accountID"] == $user["accountID"]) {
-					echo "1:".$user["userName"].":2:".$user["userID"].":9:".$user["icon"].":10:".$user["pColor"].":11:".$user["sColor"].":14:".$user["iconType"].":15:".$user["special"].":16:".$user["accountID"].":32:".$dat["requestID"].":35:".$dat["comment"].":41:".$dat["read"].":37:".makeTime($dat["uploadTime"]);
+					$new = 0;
+					if ($dat['read'] == 0) $new = 1;
+					echo "1:".$user["userName"].":2:".$user["userID"].":9:".$user["icon"].":10:".$user["pColor"].":11:".$user["sColor"].":14:".$user["iconType"].":15:".$user["special"].":16:".$user["accountID"].":32:".$dat["requestID"].":35:".$dat["comment"].":41:".$new.":37:".makeTime($dat["uploadTime"]);
 				}
 			}
 			if($i < count($r) - 1)

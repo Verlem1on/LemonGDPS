@@ -8,58 +8,61 @@ $page = sqlTrim($_POST["page"]);
 $getSent = sqlTrim($_POST["getSent"]);
 
 if(disabled($accountID)) exit("-1");
+if (!checkAct($accountID)) exit("-1");
 
 if(checkGJP($gjp, $accountID)) {
-	switch ($getSent) {
-		case '1':
-			$q = $db->prepare("SELECT * FROM messages WHERE accountID = :a ORDER BY messageID DESC");
-			$q->execute(array('a' => $accountID));
-			$r = $q->fetchAll();
-			$userString = "";
+	if ($getSent) {
 
-			if($q->rowCount() == 0) exit("-2");
+		$q = $db->prepare("SELECT * FROM messages WHERE accountID = :t ORDER BY messageID DESC");
+		$q->execute([':t' => $accountID]);
+		$r = $q->fetchAll();
 
-			for($i = 0; $i < 10; $i++) {
-				$m = $r[$page * 10 + $i];
-				$a = $db->prepare("SELECT * FROM users WHERE accountID = '".$m["targetID"]."'");
-				$a->execute();
-				$u = $a->fetch(PDO::FETCH_ASSOC);
+		$uString = "";
 
-				echo "6:".$u["userName"].":3:".$u["userID"].":2:".$m["targetID"].":1:".$m["messageID"].":4:".$m["subject"].":8:1:9:0:7:".makeTime($m["uploadTime"]);
-				$userString .= $u["userID"] . ":" . $u["userName"] . ":" . $u["accountID"];
+		for ($i = 0; $i < count($r); $i++) {
 
-				if($r[$page*10+$i+1]["messageID"] == "") break; else {
-					$userString .= "|";
-					echo "|";
-				}
+			$m = $r[$i];
+
+			$q = $db->prepare("SELECT userName, userID FROM users WHERE accountID = :a");
+			$q->execute([':a' => $m['targetID']]);
+			$u = $q->fetch(2);
+
+			echo "6:" . $u['userName'] . ":3:" . $u['userID'] . ":2:" . $m['targetID'] . ":1:" . $m['messageID'] . ":4:" . $m['subject'] . ":8:" . $m['read'] . ":9:1:7:" . makeTime($m['uploadTime']);
+			$uString .= $u['userID'] . ':' . $u['userName'] . ':' . $m['targetID'];
+
+			if ($i != count($r) - 1) {
+				echo '|';
+				$uString .= '|';
 			}
-			exit("#$userString#:0:50");
-			break;
-		
-		default:
-			$q = $db->prepare("SELECT * FROM messages WHERE targetID = :a ORDER BY messageID DESC");
-			$q->execute(array('a' => $accountID));
-			$r = $q->fetchAll();
-			$userString = "";
+		}
 
-			if($q->rowCount() == 0) exit("-2");
+		echo '#' . $uString . '#:50:0';
 
-			for($i = 0; $i < 10; $i++) {
-				$m = $r[$page * 10 + $i];
-				$a = $db->prepare("SELECT * FROM users WHERE accountID = '".$m["accountID"]."'");
-				$a->execute();
-				$u = $a->fetch(PDO::FETCH_ASSOC);
+	} else {
+        $q = $db->prepare("SELECT * FROM messages WHERE targetID = :t ORDER BY messageID DESC");
+        $q->execute([':t' => $accountID]);
+        $r = $q->fetchAll();
 
-				echo "6:".$u["userName"].":3:".$u["userID"].":2:".$m["accountID"].":1:".$m["messageID"].":4:".$m["subject"].":8:1:9:0:7:".makeTime($m["uploadTime"]);
-				$userString .= $u["userID"] . ":" . $u["userName"] . ":" . $u["accountID"];
+        $uString = "";
 
-				if($r[$page*10+$i+1]["messageID"] == "") break; else {
-					$userString .= "|";
-					echo "|";
-				}
-			}
-			exit("#$userString#:0:50");
-			break;
+        for ($i = 0; $i < count($r); $i++) {
+
+            $m = $r[$i];
+
+            $q = $db->prepare("SELECT userName, userID FROM users WHERE accountID = :a");
+            $q->execute([':a' => $m['accountID']]);
+            $u = $q->fetch(2);
+
+            echo "6:" . $u['userName'] . ":3:" . $u['userID'] . ":2:" . $m['accountID'] . ":1:" . $m['messageID'] . ":4:" . $m['subject'] . ":8:" . $m['read'] . ":9:0:7:" . makeTime($m['uploadTime']);
+            $uString .= $u['userID'] . ':' . $u['userName'] . ':' . $m['accountID'];
+
+            if ($i != count($r) - 1) {
+                echo '|';
+                $uString .= '|';
+            }
+        }
+
+        echo '#' . $uString . '#:50:0';
 	}
 }
 ?>

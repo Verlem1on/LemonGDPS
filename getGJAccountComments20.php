@@ -6,6 +6,7 @@ $accountID = sqlTrim($_POST["accountID"]);
 $page = sqlTrim($_POST["page"]);
 
 if(disabled($accountID)) exit("-1");
+if (!checkAct($accountID)) exit("-1");
 
 $q = $db->prepare("SELECT * FROM comments WHERE accountComment = '1' AND accountID = :a ORDER BY uploadTime DESC");
 $q->execute(array('a' => $accountID));

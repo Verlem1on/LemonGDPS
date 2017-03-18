@@ -6,7 +6,10 @@ $accountID = sqlTrim($_POST["accountID"]);
 $gjp = sqlTrim($_POST["gjp"]);
 $type = sqlTrim($_POST["type"]);
 
+updateCP();
+
 if(disabled($accountID)) exit("-1");
+if (!checkAct($accountID)) exit("-1");
 
 if(checkGJP($gjp, $accountID)) {
 	switch ($type) {
@@ -15,7 +18,7 @@ if(checkGJP($gjp, $accountID)) {
 			$q->execute(array('a' => $accountID));
 			$a = $db->prepare("UPDATE friends SET new = 0 WHERE accountID = :a");
 			$a->execute(array('a' => $accountID));
-			
+
 			if($q->rowCount() <= 0) exit("-2");
 
 			$r = $q->fetchAll();
@@ -26,14 +29,14 @@ if(checkGJP($gjp, $accountID)) {
 				$q1->execute(array('a' => $u));
 				$user = $q1->fetch(PDO::FETCH_ASSOC);
 
-				echo "1:".$user["userName"].":2:".$user["userID"].":9:".$user["icon"].":10:".$user["pColor"].":11:".$user["sColor"].":14:".$user["iconType"].":15:".$user["special"].":16:".$user["accountID"].":18:".$user["new"].":41:".$user["new"]."|";
+				echo "1:".$user["userName"].":2:".$user["userID"].":9:".$user["shareIcon"].":10:".$user["pColor"].":11:".$user["sColor"].":14:".$user["iconType"].":15:".$user["special"].":16:".$user["accountID"].":18:0:41:".$user['new']."|";
 			}
 			break;
-		
+
 		default:
 			$q = $db->prepare("SELECT * FROM blocked WHERE accountID = :a");
 			$q->execute(array('a' => $accountID));
-			
+
 			if($q->rowCount() <= 0) exit("-2");
 
 			$r = $q->fetchAll();
@@ -44,7 +47,7 @@ if(checkGJP($gjp, $accountID)) {
 				$q1->execute(array('a' => $u));
 				$user = $q1->fetch(PDO::FETCH_ASSOC);
 
-				echo "1:".$user["userName"].":2:".$user["userID"].":9:".$user["icon"].":10:".$user["pColor"].":11:".$user["sColor"].":14:".$user["iconType"].":15:".$user["special"].":16:".$user["accountID"].":18:0:41:0|";
+				echo "1:".$user["userName"].":2:".$user["userID"].":9:".$user["shareIcon"].":10:".$user["pColor"].":11:".$user["sColor"].":14:".$user["iconType"].":15:".$user["special"].":16:".$user["accountID"].":18:0:41:0|";
 			}
 			break;
 	}

@@ -9,23 +9,23 @@ $type = sqlTrim($_POST["type"]);
 switch ($type) {
 	case '1':
 		# Level
-		$q = $db->prepare("SELECT * FROM levels WHERE levelID = '$itemID'");
-		$q->execute();
+		$q = $db->prepare("SELECT * FROM levels WHERE levelID = :i");
+		$q->execute([':i' => $itemID]);
 		$r = $q->fetch(PDO::FETCH_ASSOC);
 		if($like == "1") $r["likes"] += 1; else $r["likes"] -= 1;
-		$q = $db->prepare("UPDATE levels SET likes = '".$r["likes"]."' WHERE levelID = '$itemID'");
-		$q->execute();
+		$q = $db->prepare("UPDATE levels SET likes = '".$r["likes"]."' WHERE levelID = :i");
+		$q->execute([':i' => $itemID]);
 		exit("1");
 		break;
 	
 	case '2':
 		# Comment
-		$q = $db->prepare("SELECT * FROM comments WHERE commentID = '$itemID'");
-		$q->execute();
+		$q = $db->prepare("SELECT * FROM comments WHERE commentID = :i");
+		$q->execute([':i' => $itemID]);
 		$r = $q->fetch(PDO::FETCH_ASSOC);
 		if($like == "1") $r["likes"] += 1; else $r["likes"] -= 1;
-		$q = $db->prepare("UPDATE comments SET likes = '".$r["likes"]."' WHERE commentID = '$itemID'");
-		$q->execute();
+		$q = $db->prepare("UPDATE comments SET likes = '".$r["likes"]."' WHERE commentID = :i");
+		$q->execute([':i' => $itemID]);
 		exit("1");
 		break;
 
@@ -35,8 +35,8 @@ switch ($type) {
 		$q->execute(array('i' => $itemID));
 		$r = $q->fetch(PDO::FETCH_ASSOC);
 		if($like == "1") $r["likes"] += 1; else $r["likes"] -= 1;
-		$q = $db->prepare("UPDATE comments SET likes = '".$r["likes"]."' WHERE commentID = '$itemID'");
-		$q->execute();
+		$q = $db->prepare("UPDATE comments SET likes = '".$r["likes"]."' WHERE commentID = :i");
+		$q->execute([':i' => $itemID]);
 		exit("1");
 		break;
 }

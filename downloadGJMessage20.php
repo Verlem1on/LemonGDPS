@@ -6,17 +6,21 @@ $accountID = sqlTrim($_POST["accountID"]);
 $gjp = sqlTrim($_POST["gjp"]);
 $messageID = sqlTrim($_POST["messageID"]);
 
+if (!checkAct($accountID)) exit("-1");
+
 if(checkGJP($gjp, $accountID)) {
 	$q = $db->prepare("SELECT * FROM messages WHERE messageID = :m");
 	$q->execute(array('m' => $messageID));
 	$m = $q->fetch(PDO::FETCH_ASSOC);
-	$qq = "";
-	if($m["targetID"] == $accountID) 
-		$qq = "SELECT * FROM users WHERE accountID = $accountID";
-	else
-		$qq = "SELECT * FROM users WHERE accountID = :t";
+
+	if ($m['targetID'] == $accountID) {
+		$qq = "SELECT * FROM users WHERE accountID = " . $m['accountID'];
+	} else {
+		$qq = "SELECT * FROM users WHERE accountID = " . $m['targetID'];
+	}
+
 	$qa = $db->prepare($qq);
-	$qa->execute(array('t' => $m["targetID"]));
+	$qa->execute();
 	$u = $qa->fetch(PDO::FETCH_ASSOC);
 
 	$q1 = $db->prepare("UPDATE messages SET `read` = 1 WHERE messageID = :m");
