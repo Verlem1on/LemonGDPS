@@ -3,7 +3,8 @@
 function checkGJP($gjp, $accountID) {
 	include "connection.php";
 	require "gjValues.php";
-	$pwd = sha1(decodeGJP($gjp) . "ThUj31rsRRf");
+	require_once 'settings/settings.php';
+	$pwd = hash(PS_CRYPT, decodeGJP($gjp) . S_SALT);
 
 	$q = $db->prepare("SELECT * FROM accounts WHERE accountID = :a");
 	$q->execute([':a' => $accountID]);
